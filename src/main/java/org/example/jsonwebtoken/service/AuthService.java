@@ -29,7 +29,7 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public String register(@Valid @org.jetbrains.annotations.UnknownNullability RegisterRequest request) {
+    public String register( RegisterRequest request) {
         if (userRepository.existsByUsername(request.username())) {
             throw new RuntimeException("Username already exists");
         }
@@ -45,7 +45,7 @@ public class AuthService {
         return "User registered successfully";
     }
 
-    public AuthResponse login(@Valid @org.jetbrains.annotations.UnknownNullability LoginRequest request) {
+    public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.username(),
