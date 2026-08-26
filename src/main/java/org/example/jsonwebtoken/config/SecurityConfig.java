@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/index.html",
-                                "/signup.html", "/login.html", "/admin-login.html",
+                                "/register.html", "/login.html", "/admin-login.html",
                                 "/customer-home.html", "/view-cart.html",
                                 "/admin-home.html",
                                 "/add-product.html", "/all-products-admin.html",

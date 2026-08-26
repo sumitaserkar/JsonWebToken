@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Sales-Savvy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff7f2, #f7f8fa, #fff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1080px;
+            min-height: 620px;
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
+        }
+
+        .left {
+            width: 48%;
+            background: linear-gradient(145deg, #191919, #292929);
+            color: white;
+            padding: 48px 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(255, 107, 53, 0.13);
+            top: -100px;
+            right: -90px;
+        }
+
+        .left::after {
+            content: "";
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            border: 35px solid rgba(255, 107, 53, 0.07);
+            bottom: -85px;
+            left: -70px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo span {
+            color: #ff6b35;
+        }
+
+        .left-content {
+            position: relative;
+            z-index: 1;
+            margin: 50px 0;
+        }
+
+        .small-text {
+            display: inline-block;
+            color: #ff8a63;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.2px;
+            margin-bottom: 18px;
+            background: rgba(255, 107, 53, 0.1);
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .left-content h1 {
+            font-size: 40px;
+            line-height: 1.12;
+            margin-bottom: 20px;
+        }
+
+        .left-content p {
+            color: #bcbcbc;
+            line-height: 1.7;
+            font-size: 14px;
+            max-width: 400px;
+        }
+
+        .features {
+            margin-top: 32px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 17px;
+            color: #e7e7e7;
+            font-size: 14px;
+        }
+
+        .icon {
+            width: 31px;
+            height: 31px;
+            background: #ff6b35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .left-bottom {
+            position: relative;
+            z-index: 1;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .right {
+            width: 52%;
+            padding: 55px 65px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            margin-bottom: 32px;
+        }
+
+        .form-header h2 {
+            font-size: 32px;
+            color: #202020;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .form-header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 21px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #444;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box input {
+            width: 100%;
+            height: 53px;
+            border: 1px solid #e1e1e1;
+            border-radius: 11px;
+            padding: 0 15px;
+            outline: none;
+            font-size: 14px;
+            color: #333;
+            background: #fafafa;
+            transition: 0.25s;
+        }
+
+        .input-box input:hover {
+            border-color: #ccc;
+            background: #fff;
+        }
+
+        .input-box input:focus {
+            border-color: #ff6b35;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.09);
+        }
+
+        .input-box input::placeholder {
+            color: #aaa;
+        }
+
+        .password-input {
+            padding-right: 65px !important;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: #fff3ee;
+            color: #ff6b35;
+            padding: 6px 9px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .show-password:hover {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: -2px 0 24px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .remember input {
+            width: 15px;
+            height: 15px;
+            accent-color: #ff6b35;
+            cursor: pointer;
+        }
+
+        .forgot {
+            color: #ff6b35;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .forgot:hover {
+            color: #e95725;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 53px;
+            border: none;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #ff6b35, #f4511e);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.22);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 25px 0;
+            color: #aaa;
+            font-size: 11px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            height: 1px;
+            background: #eee;
+            flex: 1;
+        }
+
+        .register-text {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .register-text a {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-text a:hover {
+            color: #e95725;
+        }
+
+        .back-home {
+            display: block;
+            margin-top: 17px;
+            text-align: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .back-home:hover {
+            color: #ff6b35;
+        }
+
+        @media (max-width: 850px) {
+            body {
+                padding: 20px;
+            }
+
+            .container {
+                max-width: 570px;
+            }
+
+            .left {
+                display: none;
+            }
+
+            .right {
+                width: 100%;
+                padding: 50px 45px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                border-radius: 18px;
+            }
+
+            .right {
+                padding: 38px 22px;
+            }
+
+            .form-header h2 {
+                font-size: 27px;
+            }
+
+            .form-options {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left">
+
+        <div>
+            <div class="logo">Sales-<span>Savvy</span></div>
+
+            <div class="left-content">
+
+                <div class="small-text">WELCOME BACK</div>
+
+                <h1>Your shopping world is waiting.</h1>
+
+                <p>
+                    Login to your Sales-Savvy account and continue shopping,
+                    manage your orders and discover products made for you.
+                </p>
+
+                <div class="features">
+
+                    <div class="feature">
+                        <div class="icon">✓</div>
+                        <span>Access your personalized account</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="icon">✓</div>
+                        <span>Track your orders easily</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="icon">✓</div>
+                        <span>Enjoy faster checkout</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="left-bottom">
+            Your everyday shopping destination.<br>
+            Simple choices. Better shopping.
+        </div>
+
+    </div>
+
+    <div class="right">
+
+        <div class="form-header">
+            <h2>Welcome back!</h2>
+            <p>Login to continue to Sales-Savvy.</p>
+        </div>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+                <label for="email">EMAIL ADDRESS</label>
+
+                <div class="input-box">
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="you@example.com"
+                            required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="password">PASSWORD</label>
+
+                <div class="input-box">
+
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="password-input"
+                            placeholder="Enter your password"
+                            required>
+
+                    <button
+                            type="button"
+                            class="show-password"
+                            onclick="togglePassword()">
+                        Show
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="form-options">
+
+                <label class="remember">
+                    <input type="checkbox" id="remember">
+                    Remember me
+                </label>
+
+                <a href="/forgot-password.html" class="forgot">
+                    Forgot Password?
+                </a>
+
+            </div>
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+        </form>
+
+        <div class="divider">
+            OR
+        </div>
+
+        <div class="register-text">
+            Don't have an account?
+            <a href="/register.html">Create Account</a>
+        </div>
+
+        <a href="/index.html" class="back-home">
+            ← Back to Sales-Savvy
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+    function togglePassword() {
+        const password = document.getElementById("password");
+        const button = document.querySelector(".show-password");
+
+        if (password.type === "password") {
+            password.type = "text";
+            button.textContent = "Hide";
+        } else {
+            password.type = "password";
+            button.textContent = "Show";
+        }
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        alert("Login form submitted!");
+    });
+</script>
+
+</body>
+</html>

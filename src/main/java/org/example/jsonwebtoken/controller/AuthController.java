@@ -25,6 +25,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        System.out.println("REGISTER CONTROLLER HIT");
         String message = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", message));

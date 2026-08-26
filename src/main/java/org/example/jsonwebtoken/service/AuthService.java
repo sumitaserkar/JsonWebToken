@@ -38,7 +38,12 @@ public class AuthService {
                 request.name(),
                 request.username(),
                 passwordEncoder.encode(request.password()),
-                "USER"
+                "USER",
+                request.email(),
+                request.mobile(),
+                request.gender(),
+                request.dob()
+
         );
 
         userRepository.save(user);
