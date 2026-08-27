@@ -576,7 +576,6 @@
 </div>
 
 <script>
-
     function togglePassword(id, button) {
         const password = document.getElementById(id);
 
@@ -593,18 +592,15 @@
     const confirmPassword = document.getElementById("confirmPassword");
     const passwordMessage = document.getElementById("passwordMessage");
 
-    confirmPassword.addEventListener("input", function() {
-
+    confirmPassword.addEventListener("input", function () {
         if (confirmPassword.value !== password.value) {
             passwordMessage.style.display = "block";
         } else {
             passwordMessage.style.display = "none";
         }
-
     });
 
-    document.getElementById("signupForm").addEventListener("submit", function(event) {
-
+    document.getElementById("signupForm").addEventListener("submit", async function (event) {
         event.preventDefault();
 
         if (password.value !== confirmPassword.value) {
@@ -613,10 +609,39 @@
             return;
         }
 
-        alert("Registration form submitted!");
+        const user = {
+            name: document.getElementById("name").value,
+            username: document.getElementById("username").value,
+            password: password.value,
+            email: document.getElementById("email").value,
+            mobile: document.getElementById("mobile").value,
+            gender: document.getElementById("gender").value,
+            dob: document.getElementById("dateOfBirth").value
+        };
 
+        try {
+            const response = await fetch("http://localhost:8080/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(user)
+            });
+
+            const result = await response.text();
+
+            if (response.ok) {
+                alert(result);
+                window.location.href = "/login.html";
+            } else {
+                alert("Registration failed: " + result);
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Unable to connect to the backend.");
+        }
     });
-
 </script>
 
 </body>

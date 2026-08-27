@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Product Management</title>
+
+
+    <style>
+
+        /* =========================
+           BASIC RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+
+            background: #f4f6f9;
+
+            color: #222;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            background: #1f2937;
+
+            color: white;
+
+            padding: 30px 60px;
+        }
+
+
+        .header h1 {
+
+            font-size: 32px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .header p {
+
+            color: #d1d5db;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           DASHBOARD
+        ========================= */
+
+        .dashboard {
+
+            max-width: 1200px;
+
+            margin: 50px auto;
+
+            padding: 20px;
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 25px;
+        }
+
+
+        /* =========================
+           CARD
+        ========================= */
+
+        .card {
+
+            background: white;
+
+            padding: 30px 25px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.08);
+
+            transition: 0.3s;
+        }
+
+
+        .card:hover {
+
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+
+        /* =========================
+           ICON
+        ========================= */
+
+        .icon {
+
+            font-size: 40px;
+
+            margin-bottom: 15px;
+        }
+
+
+        /* =========================
+           CARD TEXT
+        ========================= */
+
+        .card h2 {
+
+            font-size: 21px;
+
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+        /* =========================
+           BUTTON
+        ========================= */
+        .card a {
+            border: none;
+            padding: 11px 25px;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .card a:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .dashboard {
+
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .header {
+
+                padding: 25px;
+            }
+
+
+            .header h1 {
+
+                font-size: 26px;
+            }
+
+
+            .dashboard {
+
+                grid-template-columns: 1fr;
+
+                margin: 25px auto;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <h1>
+        Product Management
+    </h1>
+
+    <p>
+        Manage your products from one place
+    </p>
+
+</header>
+<!-- =========================
+     PRODUCT MANAGEMENT
+========================= -->
+
+<main class="dashboard">
+
+
+    <!-- ADD PRODUCT -->
+
+    <div class="card">
+
+        <div class="icon">
+            ＋
+        </div>
+
+        <h2>
+            Add Product
+        </h2>
+
+        <p>
+            Create a new product
+        </p>
+
+        <a href="addProduct.html">Add</a>
+
+    </div>
+    <!-- UPDATE PRODUCT -->
+
+    <div class="card">
+
+        <div class="icon">
+            ✎
+        </div>
+
+        <h2>
+            Update Product
+        </h2>
+        <p>
+            Update an existing product
+        </p>
+        <a href="updateProduct.html">Update</a>
+    </div>
+
+
+
+    <!-- DELETE PRODUCT -->
+
+    <div class="card">
+
+        <div class="icon">
+            🗑
+        </div>
+
+        <h2>
+            Delete Product
+        </h2>
+
+        <p>
+            Delete an existing product by ID
+        </p>
+
+        <a href="deleteProduct.html">Delete</a>
+
+    </div>
+
+    <!-- VIEW PRODUCT -->
+
+    <div class="card">
+
+        <div class="icon">
+            👁
+        </div>
+
+        <h2>
+            View Product
+        </h2>
+
+        <p>
+            View a particular product by ID
+        </p>
+
+        <a href="viewProduct.html">view</a>
+    </div>
+
+
+
+    <!-- VIEW ALL PRODUCTS -->
+
+    <div class="card">
+
+        <div class="icon">
+            ☷
+        </div>
+
+        <h2>
+            View All Products
+        </h2>
+
+        <p>
+            View all available products
+        </p>
+
+        <a href="viewAllProducts.html">View All</a>
+
+    </div>
+</main>
+</body>
+</html>

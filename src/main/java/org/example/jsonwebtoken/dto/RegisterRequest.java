@@ -11,7 +11,7 @@ public record RegisterRequest(
         @NotBlank String email,
         @NotBlank String mobile,
         @NotBlank String gender,
-         LocalDate dob
+        LocalDate dob
 
 ) {
 }

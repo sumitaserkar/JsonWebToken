@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -294,6 +293,19 @@
             transform: translateY(0);
         }
 
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 12px;
+            min-height: 18px;
+        }
+
         .divider {
             display: flex;
             align-items: center;
@@ -442,14 +454,14 @@
         <form id="loginForm">
 
             <div class="input-group">
-                <label for="email">EMAIL ADDRESS</label>
+                <label for="username">USERNAME</label>
 
                 <div class="input-box">
                     <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="you@example.com"
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Username"
                             required>
                 </div>
             </div>
@@ -484,15 +496,17 @@
                     Remember me
                 </label>
 
-                <a href="/forgot-password.html" class="forgot">
+                <a href="/forgot_password.html" class="forgot">
                     Forgot Password?
                 </a>
 
             </div>
 
-            <button type="submit" class="login-btn">
+            <button type="submit" class="login-btn" id="loginButton">
                 Login
             </button>
+
+            <div id="message" class="message"></div>
 
         </form>
 
@@ -514,7 +528,10 @@
 </div>
 
 <script>
+
+    // Show / Hide Password
     function togglePassword() {
+
         const password = document.getElementById("password");
         const button = document.querySelector(".show-password");
 
@@ -527,11 +544,84 @@
         }
     }
 
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
+
+    // Login
+    document.getElementById("loginForm").addEventListener("submit", async function (event) {
+
         event.preventDefault();
 
-        alert("Login form submitted!");
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const message = document.getElementById("message");
+        const loginButton = document.getElementById("loginButton");
+
+        message.textContent = "";
+        loginButton.disabled = true;
+        loginButton.textContent = "Logging in...";
+
+        try {
+
+            const response = await fetch("/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            if (!response.ok) {
+
+                message.textContent = "Invalid username or password";
+                message.style.color = "red";
+
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+
+                return;
+            }
+
+            const data = await response.json();
+
+            // Save JWT information
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("tokenType", data.tokenType);
+            localStorage.setItem("username", data.username);
+            localStorage.setItem("role", data.role);
+
+            // Redirect according to role
+            if (data.role === "ADMIN") {
+
+                window.location.href = "/admin_home.html";
+
+            } else if (data.role === "USER") {
+
+                window.location.href = "/customer_home.html";
+
+            } else {
+
+                message.textContent = "Invalid user role";
+                message.style.color = "red";
+
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+
+        } catch (error) {
+
+            console.error("Login error:", error);
+
+            message.textContent = "Unable to connect to server";
+            message.style.color = "red";
+
+            loginButton.disabled = false;
+            loginButton.textContent = "Login";
+        }
+
     });
+
 </script>
 
 </body>

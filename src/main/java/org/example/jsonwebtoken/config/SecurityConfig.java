@@ -40,10 +40,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/", "/index.html",
                                 "/register.html", "/login.html", "/admin-login.html",
-                                "/customer-home.html", "/view-cart.html",
-                                "/admin-home.html",
-                                "/add-product.html", "/all-products-admin.html",
-                                "/edit-product.html", "/view-product-admin.html",
+                                "/customer_home.html", "/view-cart.html",
+                                "/admin_home.html", "/deleteProduct.html",
+                                "/addProduct.html", "/viewAllProducts.html",
+                                "/product_management.html","/addProduct","/updateProduct","/deleteProduct/{productId}",
+                                "/viewProduct/{productId}","/viewAllProducts",
+                                "/updateProduct.html", "/viewProduct.html",
                                 "/css/**", "/js/**"
                         ).permitAll()
                         .requestMatchers("/auth/**", "/hello").permitAll()
