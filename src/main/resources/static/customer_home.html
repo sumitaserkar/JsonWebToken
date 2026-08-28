@@ -1063,7 +1063,7 @@
     </button>
 
     <div class="modal-image">
-      <img id="modalImage" src="" alt="Product">
+      <img id="modalImage" src="" alt="Product" onerror="this.onerror=null; this.src='https://placehold.co/400x300?text=No+Image'">
     </div>
 
     <div class="modal-details">
@@ -1145,7 +1145,7 @@
 
 <script>
 
-  const API_URL = "http://localhost:8080/viewAllProducts";
+  const API_URL = "/viewAllProducts";
 
   let allProducts = [];
   let cart = [];
@@ -1225,6 +1225,8 @@
 
       products.forEach(product => {
 
+          const imageSrc = product.photourl || product.photoUrl || 'https://placehold.co/400x300?text=No+Image';
+
           html += `
 
               <div class="product-card">
@@ -1232,9 +1234,9 @@
                   <div class="product-image-box">
 
                       <img
-                          src="${product.photoUrl || ''}"
+                          src="${imageSrc}"
                           alt="${product.name}"
-                          onerror="this.style.display='none'"
+                          onerror="this.onerror=null; this.src='https://placehold.co/400x300?text=No+Image'"
                       >
 
                       <span class="new-label">
@@ -1344,7 +1346,7 @@
           "Quality product from Sales-Savvy.";
 
       document.getElementById("modalImage").src =
-          product.photoUrl || "";
+          product.photourl || product.photoUrl || "https://placehold.co/400x300?text=No+Image";
 
       document.getElementById("productModal").style.display =
           "flex";
@@ -1485,8 +1487,9 @@
                   <div class="cart-item-image">
 
                       <img
-                          src="${item.photoUrl || ''}"
+                          src="${item.photourl || item.photoUrl || 'https://placehold.co/100x100?text=No+Image'}"
                           alt="${item.name}"
+                          onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=No+Image'"
                       >
 
                   </div>

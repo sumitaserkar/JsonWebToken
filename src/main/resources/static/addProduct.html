@@ -99,11 +99,13 @@
 
 <script>
     async function addProduct() {
+        const photo = document.getElementById("photourl").value;
         const product = {
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
             price: parseInt(document.getElementById("price").value),
-            photourl: document.getElementById("photourl").value
+            photourl: photo,
+            photoUrl: photo
         };
 
         const response = await fetch("/addProduct", {

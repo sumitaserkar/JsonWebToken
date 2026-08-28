@@ -24,19 +24,29 @@ public class ProductServiceImplemention implements ProductService {
         p.setName(product.getName());
         p.setPrice(product.getPrice());
         p.setDescription(product.getDescription());
-        p.setPhotourl(product.getPhotourl());
+        String photo = product.getPhotourl() != null ? product.getPhotourl() : product.getPhotoUrl();
+        p.setPhotourl(photo);
         productRepository.save(p);
         return "Product Added Successfully";
     }
 
     @Override
     public String updateProduct(ProductRequestDto product) {
-        Product p = new Product();
+        Product p = productRepository.findById(product.getId()).orElse(new Product());
         p.setId(product.getId());
-        p.setName(product.getName());
-        p.setPrice(product.getPrice());
-        p.setDescription(product.getDescription());
-        p.setPhotourl(product.getPhotourl());
+        if (product.getName() != null && !product.getName().isEmpty()) {
+            p.setName(product.getName());
+        }
+        if (product.getPrice() != 0) {
+            p.setPrice(product.getPrice());
+        }
+        if (product.getDescription() != null) {
+            p.setDescription(product.getDescription());
+        }
+        String photo = product.getPhotourl() != null ? product.getPhotourl() : product.getPhotoUrl();
+        if (photo != null && !photo.isEmpty()) {
+            p.setPhotourl(photo);
+        }
         productRepository.save(p);
         return "Product Updated Successfully";
     }

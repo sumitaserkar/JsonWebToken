@@ -101,12 +101,14 @@
 
 <script>
     async function updateProduct() {
+        const photo = document.getElementById("photoUrl").value;
         const product = {
             id: parseInt(document.getElementById("id").value),
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
             price: parseInt(document.getElementById("price").value),
-            photoUrl: document.getElementById("photoUrl").value
+            photoUrl: photo,
+            photourl: photo
         };
 
         const response = await fetch("/updateProduct", {

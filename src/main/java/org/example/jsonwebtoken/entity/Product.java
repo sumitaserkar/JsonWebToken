@@ -65,6 +65,14 @@ public class Product {
         this.photourl = photourl;
     }
 
+    public String getPhotoUrl() {
+        return photourl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photourl = photoUrl;
+    }
+
     @Override
     public String toString() {
         return "Product{ id=" + id + ", name='" + name + ", price=" + price + ", description='" + description + '\'' + ", photourl='" + photourl + '\'' + '}';

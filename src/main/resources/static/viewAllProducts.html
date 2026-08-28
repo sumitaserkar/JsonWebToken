@@ -168,9 +168,9 @@
                       <td>
                           <img
                               class="product-image"
-                              src="${product.photourl ?? ""}"
+                              src="${product.photourl || product.photoUrl || 'https://placehold.co/100?text=No+Image'}"
                               alt="Product Image"
-                              onerror="this.src='https://via.placeholder.com/100?text=No+Image'"
+                              onerror="this.onerror=null; this.src='https://placehold.co/100?text=No+Image'"
                           />
                       </td>
                   </tr>
