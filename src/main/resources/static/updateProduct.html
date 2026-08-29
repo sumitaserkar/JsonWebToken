@@ -86,7 +86,7 @@
 
     <div class="form-group">
         <label>Price</label>
-        <input type="number" id="price" />
+        <input type="number" step="0.01" id="price" />
     </div>
 
     <div class="form-group">
@@ -102,11 +102,12 @@
 <script>
     async function updateProduct() {
         const photo = document.getElementById("photoUrl").value;
+        const priceVal = document.getElementById("price").value;
         const product = {
             id: parseInt(document.getElementById("id").value),
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
-            price: parseInt(document.getElementById("price").value),
+            price: priceVal !== "" ? parseFloat(priceVal) : null,
             photoUrl: photo,
             photourl: photo
         };

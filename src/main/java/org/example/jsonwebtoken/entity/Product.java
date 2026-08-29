@@ -2,6 +2,8 @@ package org.example.jsonwebtoken.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -10,14 +12,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY  )
     Long id;
     String name;
-    int price;
+    BigDecimal price;
     String description;
     String photourl;
 
     public Product() {
     }
 
-    public Product(Long id, String name, int price, String description, String photourl) {
+    public Product(Long id, String name, BigDecimal price, String description, String photourl) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -41,11 +43,11 @@ public class Product {
         this.name = name;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

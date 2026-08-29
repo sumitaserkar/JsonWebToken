@@ -37,7 +37,7 @@ public class ProductServiceImplemention implements ProductService {
         if (product.getName() != null && !product.getName().isEmpty()) {
             p.setName(product.getName());
         }
-        if (product.getPrice() != 0) {
+        if (product.getPrice() != null) {
             p.setPrice(product.getPrice());
         }
         if (product.getDescription() != null) {

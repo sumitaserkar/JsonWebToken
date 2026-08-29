@@ -2,10 +2,12 @@ package org.example.jsonwebtoken.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 
+import java.math.BigDecimal;
+
 public class ProductRequestDto {
     private Long id;
     private String name;
-    private int price;
+    private BigDecimal price;
     private String description;
 
     @JsonAlias({"photoUrl", "photourl"})
@@ -15,7 +17,7 @@ public class ProductRequestDto {
 
     }
 
-    public ProductRequestDto(Long id, String name, int price, String description, String photourl) {
+    public ProductRequestDto(Long id, String name, BigDecimal price, String description, String photourl) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -39,11 +41,11 @@ public class ProductRequestDto {
         this.name = name;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
