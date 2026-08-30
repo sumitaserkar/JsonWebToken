@@ -71,7 +71,10 @@
 <div class="container">
     <div class="form-group">
         <label>Product ID</label>
-        <input type="number" id="id" />
+        <div style="display: flex; gap: 10px;">
+            <input type="number" id="id" placeholder="Enter product ID" />
+            <button type="button" style="background: #475569; padding: 10px 14px; white-space: nowrap;" onclick="fetchProductDetails()">Fetch Details</button>
+        </div>
     </div>
 
     <div class="form-group">
@@ -90,6 +93,11 @@
     </div>
 
     <div class="form-group">
+        <label>Stock</label>
+        <input type="number" id="stock" min="0" placeholder="Enter stock quantity" />
+    </div>
+
+    <div class="form-group">
         <label>Photo URL</label>
         <input type="text" id="photoUrl" />
     </div>
@@ -100,14 +108,53 @@
 </div>
 
 <script>
+    async function fetchProductDetails() {
+        const id = document.getElementById("id").value;
+        if (!id) {
+            alert("Please enter a Product ID first.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/viewProduct/${id}`);
+            if (response.ok) {
+                const product = await response.json();
+                const stockVal = product.stock != null ? product.stock : (product.quantity != null ? product.quantity : "");
+                document.getElementById("name").value = product.name || "";
+                document.getElementById("description").value = product.description || "";
+                document.getElementById("price").value = product.price != null ? product.price : "";
+                document.getElementById("stock").value = stockVal;
+                document.getElementById("photoUrl").value = product.photourl || product.photoUrl || "";
+                document.getElementById("messageArea").innerHTML =
+                    `<div class="message">Product details loaded. Current Stock: ${stockVal || 0}</div>`;
+            } else {
+                document.getElementById("messageArea").innerHTML =
+                    `<div class="message" style="background: #fee2e2; color: #991b1b;">Product with ID ${id} not found.</div>`;
+            }
+        } catch (e) {
+            console.error("Error fetching product:", e);
+        }
+    }
+
     async function updateProduct() {
         const photo = document.getElementById("photoUrl").value;
         const priceVal = document.getElementById("price").value;
+        const stockVal = document.getElementById("stock").value;
+        const stockNum = stockVal !== "" ? parseInt(stockVal) : null;
+        const idVal = document.getElementById("id").value;
+
+        if (!idVal) {
+            alert("Please enter a Product ID.");
+            return;
+        }
+
         const product = {
-            id: parseInt(document.getElementById("id").value),
+            id: parseInt(idVal),
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
             price: priceVal !== "" ? parseFloat(priceVal) : null,
+            stock: stockNum,
+            quantity: stockNum,
             photoUrl: photo,
             photourl: photo
         };

@@ -14,6 +14,7 @@ import org.example.jsonwebtoken.repository.ProductRepository;
 import org.example.jsonwebtoken.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CartService {
@@ -36,16 +37,28 @@ public class CartService {
         Product product = productRepository.findById(request.productId())
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + request.productId()));
 
+        int availableStock = product.getStock() != null ? product.getStock() : 0;
+        if (availableStock <= 0) {
+            throw new RuntimeException("Product is out of stock");
+        }
+
         CartItem cartItem = cartItemRepository.findByUserAndProduct(user, product)
                 .orElse(null);
 
         if (cartItem != null) {
             int newQuantity = cartItem.getQuantity() + request.quantity();
 
+            if (newQuantity > availableStock) {
+                throw new RuntimeException("Requested quantity (" + newQuantity + ") exceeds available stock (" + availableStock + ")");
+            }
 
             cartItem.setQuantity(newQuantity);
             cartItemRepository.save(cartItem);
             return "Product quantity updated in cart";
+        }
+
+        if (request.quantity() > availableStock) {
+            throw new RuntimeException("Requested quantity (" + request.quantity() + ") exceeds available stock (" + availableStock + ")");
         }
 
         CartItem newCartItem = new CartItem(user, product, request.quantity());
@@ -75,6 +88,11 @@ public class CartService {
         CartItem cartItem = cartItemRepository.findByIdAndUser(cartItemId, user)
                 .orElseThrow(() -> new RuntimeException("Cart item not found"));
 
+        int availableStock = cartItem.getProduct().getStock() != null ? cartItem.getProduct().getStock() : 0;
+        if (request.quantity() > availableStock) {
+            throw new RuntimeException("Requested quantity (" + request.quantity() + ") exceeds available stock (" + availableStock + ")");
+        }
+
         cartItem.setQuantity(request.quantity());
         cartItemRepository.save(cartItem);
 
@@ -89,6 +107,38 @@ public class CartService {
 
         cartItemRepository.delete(cartItem);
         return "Cart item removed successfully";
+    }
+
+    @Transactional
+    public String checkout() {
+        User user = getCurrentUser();
+
+        List<CartItem> cartItems = cartItemRepository.findByUser(user);
+        if (cartItems.isEmpty()) {
+            throw new RuntimeException("Your cart is empty");
+        }
+
+        // Validate all cart items against stock
+        for (CartItem item : cartItems) {
+            Product product = item.getProduct();
+            int available = product.getStock() != null ? product.getStock() : 0;
+            if (item.getQuantity() > available) {
+                throw new RuntimeException("Insufficient stock for product '" + product.getName() + "'. Available: " + available + ", in cart: " + item.getQuantity());
+            }
+        }
+
+        // Deduct stock for each product
+        for (CartItem item : cartItems) {
+            Product product = item.getProduct();
+            int currentStock = product.getStock() != null ? product.getStock() : 0;
+            product.setStock(currentStock - item.getQuantity());
+            productRepository.save(product);
+        }
+
+        // Clear cart
+        cartItemRepository.deleteAll(cartItems);
+
+        return "Order placed successfully! Product stock has been updated.";
     }
 
     private User getCurrentUser() {

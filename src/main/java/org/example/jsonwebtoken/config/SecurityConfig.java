@@ -49,8 +49,8 @@ public class SecurityConfig {
                                 "/css/**", "/js/**"
                         ).permitAll()
                         .requestMatchers("/auth/**", "/hello").permitAll()
-                        .requestMatchers("/customer/cart/**").hasRole("USER")
-                        .requestMatchers("/customer/payment/**").hasRole("USER")
+                        .requestMatchers("/customer/cart/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/customer/payment/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/products/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/customer/**").hasAnyRole("USER", "ADMIN")

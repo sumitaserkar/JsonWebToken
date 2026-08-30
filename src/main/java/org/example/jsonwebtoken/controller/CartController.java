@@ -44,4 +44,10 @@ public class CartController {
         String message = cartService.removeCartItem(cartItemId);
         return ResponseEntity.ok(Map.of("message", message));
     }
+
+    @PostMapping("/checkout")
+    public ResponseEntity<Map<String, String>> checkout() {
+        String message = cartService.checkout();
+        return ResponseEntity.ok(Map.of("message", message));
+    }
 }

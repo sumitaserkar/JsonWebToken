@@ -158,13 +158,18 @@
           let rows = "";
 
           products.forEach(product => {
+              const qty = product.quantity != null ? product.quantity : 0;
+              const stockBadge = qty > 0 
+                  ? `<span style="display:inline-block; padding: 4px 8px; border-radius: 6px; background: #dcfce7; color: #166534; font-weight: bold;">${qty} in stock</span>`
+                  : `<span style="display:inline-block; padding: 4px 8px; border-radius: 6px; background: #fee2e2; color: #991b1b; font-weight: bold;">Out of stock</span>`;
+
               rows += `
                   <tr>
                       <td>${product.id ?? ""}</td>
                       <td>${product.name ?? ""}</td>
                       <td>${product.description ?? ""}</td>
-                      <td>${product.price ?? ""}</td>
-
+                      <td>₹${product.price != null ? Number(product.price).toLocaleString("en-IN") : ""}</td>
+                      <td>${stockBadge}</td>
                       <td>
                           <img
                               class="product-image"
@@ -185,6 +190,7 @@
                           <th>Name</th>
                           <th>Description</th>
                           <th>Product Price</th>
+                          <th>Stock / Quantity</th>
                           <th>Product Preview</th>
                       </tr>
                       ${rows}

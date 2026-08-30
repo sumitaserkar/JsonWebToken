@@ -13,6 +13,9 @@ public class ProductRequestDto {
     @JsonAlias({"photoUrl", "photourl"})
     private String photourl;
 
+    @JsonAlias({"stock", "quantity"})
+    private Integer stock;
+
     public ProductRequestDto() {
 
     }
@@ -23,6 +26,15 @@ public class ProductRequestDto {
         this.price = price;
         this.description = description;
         this.photourl = photourl;
+    }
+
+    public ProductRequestDto(Long id, String name, BigDecimal price, String description, String photourl, Integer stock) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.photourl = photourl;
+        this.stock = stock;
     }
 
     public Long getId() {
@@ -71,5 +83,22 @@ public class ProductRequestDto {
 
     public void setPhotoUrl(String photoUrl) {
         this.photourl = photoUrl;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    // Alias methods for compatibility
+    public Integer getQuantity() {
+        return stock;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.stock = quantity;
     }
 }

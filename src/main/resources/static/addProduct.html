@@ -88,6 +88,11 @@
     </div>
 
     <div class="form-group">
+        <label>Stock</label>
+        <input type="number" id="stock" min="0" placeholder="Enter stock quantity" />
+    </div>
+
+    <div class="form-group">
         <label>Photo URL</label>
         <input type="text" id="photourl" />
     </div>
@@ -101,10 +106,14 @@
     async function addProduct() {
         const photo = document.getElementById("photourl").value;
         const priceVal = document.getElementById("price").value;
+        const stockVal = document.getElementById("stock").value;
+        const stockNum = stockVal !== "" ? parseInt(stockVal) : null;
         const product = {
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
             price: priceVal !== "" ? parseFloat(priceVal) : null,
+            stock: stockNum,
+            quantity: stockNum,
             photourl: photo,
             photoUrl: photo
         };

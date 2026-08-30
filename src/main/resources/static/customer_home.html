@@ -1080,10 +1080,13 @@
 
       <div class="modal-price" id="modalPrice"></div>
 
+      <div class="modal-stock" id="modalStock" style="font-size: 14px; font-weight: bold; margin-bottom: 15px;"></div>
+
       <p class="modal-description" id="modalDescription"></p>
 
       <button
               class="modal-add"
+              id="modalAddBtn"
               onclick="addSelectedProductToCart()"
       >
         🛒 Add to Cart
@@ -1142,7 +1145,7 @@
 
 </footer>
 
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 
   const API_URL = "/viewAllProducts";
@@ -1273,6 +1276,8 @@
       products.forEach(product => {
 
           const imageSrc = product.photourl || product.photoUrl || 'https://placehold.co/400x300?text=No+Image';
+          const qty = product.quantity != null ? product.quantity : 0;
+          const isOutOfStock = qty <= 0;
 
           html += `
 
@@ -1286,8 +1291,8 @@
                           onerror="this.onerror=null; this.src='https://placehold.co/400x300?text=No+Image'"
                       >
 
-                      <span class="new-label">
-                          New
+                      <span class="new-label" style="background: ${isOutOfStock ? '#dc2626' : '#6849ee'}">
+                          ${isOutOfStock ? 'Out of Stock' : 'In Stock'}
                       </span>
 
                   </div>
@@ -1306,6 +1311,10 @@
                           ${product.description || "Quality product from Sales-Savvy."}
                       </p>
 
+                      <div style="margin: 8px 0 4px 0; font-size: 13px; font-weight: bold; color: ${isOutOfStock ? '#dc2626' : '#16a34a'};">
+                          ${isOutOfStock ? '✗ Out of Stock' : `✓ Stock: ${qty} units`}
+                      </div>
+
                       <div class="product-price">
                           ₹${Number(product.price).toLocaleString("en-IN")}
                       </div>
@@ -1321,9 +1330,11 @@
 
                           <button
                               class="add-cart-btn"
-                              onclick="addToCart(${product.id})"
+                              style="${isOutOfStock ? 'background: #94a3b8; cursor: not-allowed;' : ''}"
+                              onclick="${isOutOfStock ? '' : `addToCart(${product.id})`}"
+                              ${isOutOfStock ? 'disabled' : ''}
                           >
-                              🛒 Add to Cart
+                              ${isOutOfStock ? 'Out of Stock' : '🛒 Add to Cart'}
                           </button>
 
                       </div>
@@ -1395,6 +1406,24 @@
       document.getElementById("modalImage").src =
           product.photourl || product.photoUrl || "https://placehold.co/400x300?text=No+Image";
 
+      const qty = product.quantity != null ? product.quantity : 0;
+      const modalStock = document.getElementById("modalStock");
+      const modalAddBtn = document.getElementById("modalAddBtn");
+
+      if (qty > 0) {
+          modalStock.innerHTML = `<span style="color: #16a34a;">✓ In Stock (${qty} available)</span>`;
+          modalAddBtn.disabled = false;
+          modalAddBtn.style.background = "#6849ee";
+          modalAddBtn.style.cursor = "pointer";
+          modalAddBtn.textContent = "🛒 Add to Cart";
+      } else {
+          modalStock.innerHTML = `<span style="color: #dc2626;">✗ Currently Out of Stock</span>`;
+          modalAddBtn.disabled = true;
+          modalAddBtn.style.background = "#94a3b8";
+          modalAddBtn.style.cursor = "not-allowed";
+          modalAddBtn.textContent = "Out of Stock";
+      }
+
       document.getElementById("productModal").style.display =
           "flex";
   }
@@ -1411,43 +1440,61 @@
 
   /* ADD TO CART (BACKEND API) */
 
-  async function addToCart(id) {
-      const headers = getAuthHeaders();
-      if (!headers) {
-          alert("Please log in to add products to your cart.");
-          window.location.href = "/login.html";
-          return;
-      }
+async function addToCart(id) {
 
-      try {
-          const response = await fetch("/customer/cart", {
-              method: "POST",
-              headers: headers,
-              body: JSON.stringify({
-                  productId: id,
-                  quantity: 1
-              })
-          });
+    const headers = getAuthHeaders();
 
-          if (response.status === 401 || response.status === 403) {
-              alert("Session expired. Please log in again.");
-              window.location.href = "/login.html";
-              return;
-          }
+    if (!headers) {
+        alert("Please log in to add products to your cart.");
+        window.location.href = "/login.html";
+        return;
+    }
 
-          if (response.ok) {
-              showAddedMessage();
-              await loadCart();
-          } else {
-              const err = await response.text();
-              alert("Failed to add to cart: " + err);
-          }
-      } catch (error) {
-          console.error("Error adding to cart:", error);
-          alert("Unable to connect to server. Please ensure the backend is running.");
-      }
-  }
+    try {
 
+        const response = await fetch("/customer/cart", {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify({
+                productId: id,
+                quantity: 1
+            })
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            alert("Session expired. Please log in again.");
+            window.location.href = "/login.html";
+            return;
+        }
+
+        if (response.ok) {
+
+            // Product was successfully added
+            showAddedMessage();
+
+            // Don't let loadCart() error show
+            // "Unable to connect to server"
+            try {
+                await loadCart();
+            } catch (error) {
+                console.error("Cart refresh error:", error);
+            }
+
+        } else {
+
+            const err = await response.text();
+            alert("Failed to add to cart: " + err);
+        }
+
+    } catch (error) {
+
+        console.error("Add to cart error:", error);
+
+        alert(
+            "Unable to add product to cart. Please ensure the backend is running."
+        );
+    }
+}
 
   /* ADD SELECTED PRODUCT */
 
@@ -1692,60 +1739,277 @@
 
   /* CHECKOUT */
 
-  function checkout() {
+  async function checkout() {
 
-      alert(
-          "Proceeding to checkout with total amount: ₹" + Number(cartData.totalAmount || 0).toLocaleString("en-IN")
-      );
-  }
+    const headers = getAuthHeaders();
+
+    // Check login
+    if (!headers) {
+        alert("Please log in to proceed with checkout.");
+        window.location.href = "/login.html";
+        return;
+    }
+
+    // Check cart
+    if (!cartData.items || cartData.items.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+
+    try {
+
+        // ==========================================
+        // 1. CREATE PAYMENT ORDER
+        // ==========================================
+
+        const response = await fetch("/customer/payment/create-order", {
+            method: "POST",
+            headers: headers
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            alert("Session expired. Please login again.");
+            window.location.href = "/login.html";
+            return;
+        }
+
+        if (!response.ok) {
+
+            const error = await response.text();
+
+            alert(
+                "Unable to create payment order: " + error
+            );
+
+            return;
+        }
+
+        // Backend response
+        const order = await response.json();
+
+        console.log("Created payment order:", order);
 
 
-  /* ADD MESSAGE */
+        // ==========================================
+        // 2. OPEN RAZORPAY CHECKOUT
+        // ==========================================
 
-  function showAddedMessage() {
+        const options = {
 
-      const message =
-          document.createElement("div");
+            // Razorpay Key ID
+            key: order.keyId,
 
-      message.textContent =
-          "✓ Product added to cart";
+            // Amount is already in paise
+            amount: order.amount,
 
-      message.style.position = "fixed";
-      message.style.bottom = "25px";
-      message.style.right = "25px";
-      message.style.background = "#19152d";
-      message.style.color = "white";
-      message.style.padding = "13px 20px";
-      message.style.borderRadius = "10px";
-      message.style.zIndex = "2000";
-      message.style.fontSize = "13px";
-      message.style.boxShadow =
-          "0 10px 30px rgba(0,0,0,0.2)";
+            // INR
+            currency: order.currency,
 
-      document.body.appendChild(message);
+            // Store name
+            name: "Sales-Savvy",
 
-      setTimeout(() => {
-          message.remove();
-      }, 1800);
-  }
+            description: "Sales-Savvy Order",
 
-  /* CLOSE WHEN CLICK OUTSIDE */
+            // Razorpay Order ID
+            order_id: order.razorpayOrderId,
 
-  document.getElementById("productModal")
-      .addEventListener("click", function(event) {
 
-          if (event.target === this) {
-              closeModal();
-          }
-      });
+            // ======================================
+            // 3. PAYMENT SUCCESS
+            // ======================================
 
-  document.getElementById("cartOverlay")
-      .addEventListener("click", function(event) {
+            handler: async function (paymentResponse) {
 
-          if (event.target === this) {
-              closeCart();
-          }
-      });
+                console.log(
+                    "Razorpay payment response:",
+                    paymentResponse
+                );
+
+
+                try {
+
+                    // ==================================
+                    // 4. VERIFY PAYMENT
+                    // ==================================
+
+                    const verifyResponse = await fetch(
+                        "/customer/payment/verify",
+                        {
+                            method: "POST",
+                            headers: headers,
+
+                            body: JSON.stringify({
+
+                                localOrderId:
+                                    order.localOrderId,
+
+                                razorpayPaymentId:
+                                    paymentResponse.razorpay_payment_id,
+
+                                razorpayOrderId:
+                                    paymentResponse.razorpay_order_id,
+
+                                razorpaySignature:
+                                    paymentResponse.razorpay_signature
+
+                            })
+                        }
+                    );
+
+
+                    // ==================================
+                    // 5. PAYMENT VERIFIED
+                    // ==================================
+
+                    if (verifyResponse.ok) {
+
+                        const result =
+                            await verifyResponse.json();
+
+                        alert(
+                            result.message ||
+                            "Payment successful!"
+                        );
+
+                        // Close cart
+                        closeCart();
+
+                        // Reload cart
+                        await loadCart();
+
+                        // Reload products
+                        // This updates stock
+                        await loadProducts();
+
+                    }
+
+
+                    // ==================================
+                    // 6. VERIFICATION FAILED
+                    // ==================================
+
+                    else {
+
+                        let errorMessage =
+                            "Payment verification failed.";
+
+                        try {
+
+                            const errorData =
+                                await verifyResponse.json();
+
+                            errorMessage =
+                                errorData.message ||
+                                errorData.error ||
+                                errorMessage;
+
+                        } catch (e) {
+
+                            const text =
+                                await verifyResponse.text();
+
+                            if (text) {
+                                errorMessage = text;
+                            }
+                        }
+
+                        alert(errorMessage);
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Payment verification error:",
+                        error
+                    );
+
+                    alert(
+                        "Payment was completed, but verification failed. Please contact support."
+                    );
+                }
+            },
+
+
+            // ==========================================
+            // 7. PAYMENT WINDOW CLOSED
+            // ==========================================
+
+            modal: {
+
+                ondismiss: function () {
+
+                    console.log(
+                        "Razorpay payment window closed."
+                    );
+
+                }
+
+            },
+
+
+            // ==========================================
+            // 8. RAZORPAY THEME
+            // ==========================================
+
+            theme: {
+
+                color: "#6849ee"
+
+            }
+
+        };
+
+
+        // ==========================================
+        // 9. CREATE RAZORPAY OBJECT
+        // ==========================================
+
+        const razorpay = new Razorpay(options);
+
+
+        // ==========================================
+        // 10. PAYMENT FAILED
+        // ==========================================
+
+        razorpay.on(
+            "payment.failed",
+            function (response) {
+
+                console.error(
+                    "Payment failed:",
+                    response.error
+                );
+
+                alert(
+                    "Payment failed: " +
+                    (
+                        response.error.description ||
+                        "Please try again."
+                    )
+                );
+            }
+        );
+
+
+        // ==========================================
+        // 11. OPEN RAZORPAY PAYMENT WINDOW
+        // ==========================================
+
+        razorpay.open();
+
+
+    } catch (error) {
+
+        console.error(
+            "Checkout error:",
+            error
+        );
+
+        alert(
+            "Unable to process payment. Please try again."
+        );
+    }
+}
 
   /* INITIALIZE ON LOAD */
 

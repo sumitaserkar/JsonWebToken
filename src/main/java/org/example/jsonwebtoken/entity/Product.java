@@ -15,6 +15,7 @@ public class Product {
     BigDecimal price;
     String description;
     String photourl;
+    Integer stock;
 
     public Product() {
     }
@@ -25,6 +26,15 @@ public class Product {
         this.price = price;
         this.description = description;
         this.photourl = photourl;
+    }
+
+    public Product(Long id, String name, BigDecimal price, String description, String photourl, Integer stock) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.photourl = photourl;
+        this.stock = stock;
     }
 
     public Long getId() {
@@ -75,8 +85,32 @@ public class Product {
         this.photourl = photoUrl;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    // Alias methods for compatibility
+    public Integer getQuantity() {
+        return stock;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.stock = quantity;
+    }
+
     @Override
     public String toString() {
-        return "Product{ id=" + id + ", name='" + name + ", price=" + price + ", description='" + description + '\'' + ", photourl='" + photourl + '\'' + '}';
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", photourl='" + photourl + '\'' +
+                ", stock=" + stock +
+                '}';
     }
 }

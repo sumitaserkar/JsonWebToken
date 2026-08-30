@@ -112,6 +112,8 @@
       document.getElementById("messageArea").innerHTML =
           `<div class="message">Product fetched successfully.</div>`;
 
+      const stockVal = product.stock != null ? product.stock : (product.quantity != null ? product.quantity : 0);
+
       document.getElementById("resultArea").innerHTML = `
           <table>
               <tr>
@@ -119,13 +121,15 @@
                   <th>Name</th>
                   <th>Description</th>
                   <th>Price</th>
+                  <th>Stock</th>
                   <th>Photo URL</th>
               </tr>
               <tr>
                   <td>${product.id ?? ""}</td>
                   <td>${product.name ?? ""}</td>
                   <td>${product.description ?? ""}</td>
-                  <td>${product.price ?? ""}</td>
+                  <td>₹${product.price != null ? Number(product.price).toLocaleString('en-IN') : ""}</td>
+                  <td><strong style="color: ${stockVal > 0 ? '#16a34a' : '#dc2626'}">${stockVal} ${stockVal > 0 ? '(In Stock)' : '(Out of Stock)'}</strong></td>
                   <td>${product.photourl ?? product.photoUrl ?? ""}</td>
               </tr>
           </table>

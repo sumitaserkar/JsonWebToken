@@ -26,6 +26,7 @@ public class ProductServiceImplemention implements ProductService {
         p.setDescription(product.getDescription());
         String photo = product.getPhotourl() != null ? product.getPhotourl() : product.getPhotoUrl();
         p.setPhotourl(photo);
+        p.setStock(product.getStock() != null ? product.getStock() : product.getQuantity());
         productRepository.save(p);
         return "Product Added Successfully";
     }
@@ -47,6 +48,10 @@ public class ProductServiceImplemention implements ProductService {
         if (photo != null && !photo.isEmpty()) {
             p.setPhotourl(photo);
         }
+        Integer stock = product.getStock() != null ? product.getStock() : product.getQuantity();
+        if (stock != null) {
+            p.setStock(stock);
+        }
         productRepository.save(p);
         return "Product Updated Successfully";
     }
@@ -60,24 +65,26 @@ public class ProductServiceImplemention implements ProductService {
     @Override
     public ProductRequestDto viewProduct(Long productId) {
         Product p = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
-        return new  ProductRequestDto (
+        return new ProductRequestDto(
                 p.getId(),
                 p.getName(),
                 p.getPrice(),
                 p.getDescription(),
-                p.getPhotourl()
+                p.getPhotourl(),
+                p.getStock()
         );
     }
 
     @Override
     public List<ProductRequestDto> viewAllProducts() {
-        List <Product> p = productRepository.findAll();
+        List<Product> p = productRepository.findAll();
         return p.stream().map(product -> new ProductRequestDto(
                 product.getId(),
                 product.getName(),
                 product.getPrice(),
                 product.getDescription(),
-                product.getPhotourl()
+                product.getPhotourl(),
+                product.getStock()
         )).toList();
     }
 }
