@@ -1,136 +1,452 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Product</title>
-    <style>
-        * { box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { margin: 0; background: #f8fafc; }
-        header {
-            background: #0f172a;
-            color: white;
-            padding: 20px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .btn-link {
-            text-decoration: none;
-            background: #2563eb;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        .container {
-            width: 90%;
-            max-width: 600px;
-            margin: 35px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 14px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
-        h2 { margin-top: 0; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-weight: bold; }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        textarea { min-height: 90px; resize: vertical; }
-        button {
-            background: #16a34a;
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .message {
-            margin-top: 18px;
-            padding: 12px;
-            border-radius: 8px;
-            background: #dcfce7;
-            color: #166534;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-<header>
-    <h1>Add Product</h1>
-    <a class="btn-link" href="product_management.html">Back</a>
-</header>
 
-<div class="container">
-    <h2>Enter Product Details</h2>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="name" />
+        <title>ShopGo | Add Product</title>
+
+        <style>
+            * {
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+            }
+
+            body {
+                margin: 0;
+                min-height: 100vh;
+                background: #f7f8fa;
+                color: #222;
+            }
+
+            /* =========================
+               HEADER
+            ========================== */
+
+            header {
+                background: #ffffff;
+                border-bottom: 1px solid #eee;
+                padding: 17px 7%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            }
+
+            .logo {
+                font-size: 28px;
+                font-weight: 800;
+                letter-spacing: -0.8px;
+                color: #222;
+                margin: 0;
+            }
+
+            .logo span {
+                color: #ff6b35;
+            }
+
+            .header-title {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .header-title h1 {
+                margin: 0;
+                font-size: 20px;
+                color: #222;
+                font-weight: 700;
+            }
+
+            /* =========================
+               BACK BUTTON
+            ========================== */
+
+            .btn-link {
+                text-decoration: none;
+                background: #ffffff;
+                color: #ff6b35;
+                padding: 10px 17px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 700;
+                transition: all 0.2s ease;
+            }
+
+            .btn-link:hover {
+                background: #fff0ea;
+                border-color: #ff6b35;
+                color: #e95725;
+            }
+
+            /* =========================
+               MAIN CONTAINER
+            ========================== */
+
+            .container {
+                width: 92%;
+                max-width: 650px;
+                margin: 42px auto;
+                background: #ffffff;
+                padding: 36px 40px;
+                border-radius: 10px;
+                border: 1px solid #eee;
+                box-shadow: 0 8px 28px rgba(0, 0, 0, 0.05);
+            }
+
+            .form-header {
+                margin-bottom: 28px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #eee;
+            }
+
+            h2 {
+                margin: 0 0 8px;
+                color: #222;
+                font-size: 24px;
+                font-weight: 800;
+            }
+
+            .form-header p {
+                margin: 0;
+                color: #777;
+                font-size: 14px;
+                line-height: 1.5;
+            }
+
+            /* =========================
+               FORM
+            ========================== */
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 7px;
+                color: #222;
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            input,
+            textarea {
+                width: 100%;
+                padding: 12px 13px;
+                border: 1px solid #ddd;
+                border-radius: 7px;
+                background: #ffffff;
+                color: #222;
+                font-size: 14px;
+                outline: none;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            input::placeholder,
+            textarea::placeholder {
+                color: #999;
+            }
+
+            input:focus,
+            textarea:focus {
+                border-color: #ff6b35;
+                box-shadow: 0 0 0 3px #fff0ea;
+            }
+
+            textarea {
+                min-height: 100px;
+                resize: vertical;
+                line-height: 1.5;
+            }
+
+            /* =========================
+               ADD PRODUCT BUTTON
+            ========================== */
+
+            button {
+                width: 100%;
+                background: #ff6b35;
+                color: #ffffff;
+                border: 1px solid #ff6b35;
+                padding: 13px 18px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                margin-top: 5px;
+            }
+
+            button:hover {
+                background: #e95725;
+                border-color: #e95725;
+                box-shadow: 0 5px 14px rgba(255, 107, 53, 0.18);
+                transform: translateY(-1px);
+            }
+
+            button:active {
+                transform: translateY(0);
+            }
+
+            /* =========================
+               MESSAGE
+            ========================== */
+
+            .message {
+                margin-top: 18px;
+                padding: 12px 14px;
+                border-radius: 7px;
+                background: #fff0ea;
+                border: 1px solid #ffe9df;
+                color: #e95725;
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 1.5;
+            }
+
+            /* =========================
+               RESPONSIVE
+            ========================== */
+
+            @media (max-width: 600px) {
+
+                header {
+                    padding: 16px 20px;
+                }
+
+                .logo {
+                    font-size: 25px;
+                }
+
+                .header-title {
+                    gap: 8px;
+                }
+
+                .header-title h1 {
+                    font-size: 16px;
+                }
+
+                .btn-link {
+                    padding: 9px 13px;
+                    font-size: 13px;
+                }
+
+                .container {
+                    width: 94%;
+                    margin: 28px auto;
+                    padding: 28px 22px;
+                    border-radius: 10px;
+                }
+
+                h2 {
+                    font-size: 22px;
+                }
+
+                .form-header {
+                    margin-bottom: 24px;
+                }
+
+                input,
+                textarea {
+                    padding: 11px 12px;
+                }
+
+                button {
+                    padding: 13px 16px;
+                }
+            }
+
+            @media (max-width: 400px) {
+
+                header {
+                    flex-direction: column;
+                    gap: 12px;
+                    text-align: center;
+                }
+
+                .header-title {
+                    width: 100%;
+                    justify-content: space-between;
+                }
+
+                .container {
+                    padding: 25px 18px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+
+    <script>
+        (function checkAdminAuth() {
+            const token = localStorage.getItem("token");
+            const role  = localStorage.getItem("role");
+            if (!token || role !== "ADMIN") {
+                alert("Access denied! Please log in as Admin.");
+                window.location.replace("/login.html");
+            }
+        })();
+    </script>
+
+
+    <header>
+
+        <div class="logo">
+            Shop<span>Go</span>
+        </div>
+
+        <div class="header-title">
+            <h1>Add Product</h1>
+            <a class="btn-link" href="product_management.html">Back</a>
+        </div>
+
+    </header>
+
+
+    <div class="container">
+
+        <div class="form-header">
+            <h2>Enter Product Details</h2>
+            <p>
+                Add a new product to your ShopGo store by entering the details below.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="name" />
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Price</label>
+            <input type="number" step="0.01" id="price" />
+        </div>
+
+        <div class="form-group">
+            <label>Stock</label>
+            <input type="number" id="stock" min="0" placeholder="Enter stock quantity" />
+        </div>
+
+        <div class="form-group">
+            <label>Photo URL</label>
+            <input type="text" id="photourl" />
+        </div>
+
+        <button onclick="addProduct()">Add Product</button>
+
+        <div id="messageArea"></div>
     </div>
 
-    <div class="form-group">
-        <label>Description</label>
-        <textarea id="description"></textarea>
-    </div>
 
-    <div class="form-group">
-        <label>Price</label>
-        <input type="number" step="0.01" id="price" />
-    </div>
+    <script>
 
-    <div class="form-group">
-        <label>Stock</label>
-        <input type="number" id="stock" min="0" placeholder="Enter stock quantity" />
-    </div>
+        async function addProduct() {
 
-    <div class="form-group">
-        <label>Photo URL</label>
-        <input type="text" id="photourl" />
-    </div>
+            const name = document.getElementById("name").value.trim();
+            const description = document.getElementById("description").value.trim();
+            const price = document.getElementById("price").value;
+            const stock = document.getElementById("stock").value;
+            const photoUrl = document.getElementById("photourl").value.trim();
 
-    <button onclick="addProduct()">Add Product</button>
+            if (!name || !description || !price || !stock || !photoUrl) {
+                showMessage("Please fill all product details.");
+                return;
+            }
 
-    <div id="messageArea"></div>
-</div>
+            const product = {
+                name: name,
+                price: parseFloat(price),
+                description: description,
+                photoUrl: photoUrl,
+                stock: parseInt(stock)
+            };
 
-<script>
-    async function addProduct() {
-        const photo = document.getElementById("photourl").value;
-        const priceVal = document.getElementById("price").value;
-        const stockVal = document.getElementById("stock").value;
-        const stockNum = stockVal !== "" ? parseInt(stockVal) : null;
-        const product = {
-            name: document.getElementById("name").value,
-            description: document.getElementById("description").value,
-            price: priceVal !== "" ? parseFloat(priceVal) : null,
-            stock: stockNum,
-            quantity: stockNum,
-            photourl: photo,
-            photoUrl: photo
-        };
+            console.log("Product being sent:", product);
 
-        const response = await fetch("/addProduct", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(product)
-        });
+            try {
 
-        const result = await response.text();
+                const response = await fetch("/addProduct", {
+                    method: "POST",
 
-        document.getElementById("messageArea").innerHTML =
-            `<div class="message">${result}</div>`;
-    }
-</script>
-</body>
-</html>
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(product)
+                });
+
+                const result = await response.text();
+
+                console.log("Status:", response.status);
+                console.log("Backend response:", result);
+
+                if (response.ok) {
+
+                    showSuccessMessage(
+                        result || "Product added successfully."
+                    );
+
+                    document.getElementById("name").value = "";
+                    document.getElementById("description").value = "";
+                    document.getElementById("price").value = "";
+                    document.getElementById("stock").value = "";
+                    document.getElementById("photourl").value = "";
+
+                } else {
+
+                    showMessage(
+                        result || "Product could not be added."
+                    );
+                }
+
+            } catch (error) {
+
+                console.error("Add Product Error:", error);
+
+                showMessage(
+                    "Unable to connect to the server."
+                );
+            }
+        }
+
+
+        function showMessage(message) {
+
+            const area = document.getElementById("messageArea");
+
+            area.innerHTML = `
+                <div class="message">
+                    ${message}
+                </div>
+            `;
+        }
+
+
+        function showSuccessMessage(message) {
+
+            const area = document.getElementById("messageArea");
+
+            area.innerHTML = `
+                <div class="message"
+                     style="
+                        background:#eefaf3;
+                        border:1px solid #ccebd9;
+                        color:#28734a;
+                     ">
+                    ${message}
+                </div>
+            `;
+        }
+
+    </script>
+    </body>
+    </html>

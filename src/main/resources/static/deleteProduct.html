@@ -62,6 +62,16 @@
     </style>
 </head>
 <body>
+<script>
+    (function checkAdminAuth() {
+        const token = localStorage.getItem("token");
+        const role  = localStorage.getItem("role");
+        if (!token || role !== "ADMIN") {
+            alert("Access denied! Please log in as Admin.");
+            window.location.replace("/login.html");
+        }
+    })();
+</script>
 <header>
     <h1>Delete Product</h1>
     <a class="btn-link" href="product_management.html">Back</a>

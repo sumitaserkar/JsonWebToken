@@ -37,18 +37,25 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // ── Public static pages (browser GET — no JWT header possible) ──
                         .requestMatchers(
                                 "/", "/index.html",
                                 "/register.html", "/login.html", "/admin-login.html",
                                 "/customer_home.html", "/view-cart.html",
-                                "/admin_home.html", "/deleteProduct.html",
-                                "/addProduct.html", "/viewAllProducts.html",
-                                "/product_management.html","/addProduct","/updateProduct","/deleteProduct/{productId}",
-                                "/viewProduct/{productId}","/viewAllProducts",
-                                "/updateProduct.html", "/viewProduct.html",
+                                "/viewAllProducts.html", "/viewProduct.html",
+                                // Admin HTML pages served publicly; JS guard does the redirect
+                                "/admin_home.html", "/admin-login.html",
+                                "/addProduct.html", "/updateProduct.html",
+                                "/deleteProduct.html", "/product_management.html",
                                 "/css/**", "/js/**"
                         ).permitAll()
+                        // ── Auth endpoints ──
                         .requestMatchers("/auth/**", "/hello").permitAll()
+                        // ── Public product READ REST APIs ──
+                        .requestMatchers("/viewAllProducts", "/viewProduct/**").permitAll()
+                        // ── Admin-only product mutation REST APIs ──
+                        .requestMatchers("/addProduct", "/updateProduct", "/deleteProduct/**").hasRole("ADMIN")
+                        // ── Cart & Payment (USER or ADMIN) ──
                         .requestMatchers("/customer/cart/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/customer/payment/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/products/**").hasAnyRole("USER", "ADMIN")
