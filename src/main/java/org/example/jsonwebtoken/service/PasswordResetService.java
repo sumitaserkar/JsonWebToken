@@ -31,7 +31,7 @@ public class PasswordResetService {
     public void sendOtp (String gmail) {
 
         // Check user exists
-        User user = userRepository.findByEmail(gmail)
+        User user = userRepository.findByGmail(gmail)
                 .orElseThrow(() -> new RuntimeException("User not found with this email "));
 
         // Generate 6 digit OTP
@@ -96,7 +96,7 @@ public class PasswordResetService {
             throw new RuntimeException("Passwords do not match");
         }
 
-        User user = userRepository.findByEmail(gmail)
+        User user = userRepository.findByGmail(gmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setPassword(passwordEncoder.encode(newPassword));

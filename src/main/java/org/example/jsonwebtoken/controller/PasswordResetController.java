@@ -1,6 +1,7 @@
 package org.example.jsonwebtoken.controller;
 
 import org.example.jsonwebtoken.dto.ForgotPasswordRequest;
+import org.example.jsonwebtoken.dto.ResetPasswordRequest;
 import org.example.jsonwebtoken.dto.VerifyOtpRequest;
 import org.example.jsonwebtoken.service.PasswordResetService;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,19 @@ public class PasswordResetController {
         );
 
         return ResponseEntity.ok("OTP verified successfully");
+
     }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword( @RequestBody ResetPasswordRequest request) {
+
+        passwordResetService.resetPassword(
+                request.gmail(),
+                request.newPassword(),
+                request.confirmPassword()
+        );
+
+        return ResponseEntity.ok("Password reset successfully");
+    }
+
 }

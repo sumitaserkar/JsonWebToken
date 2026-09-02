@@ -46,7 +46,10 @@ public class SecurityConfig {
                                 // Admin HTML pages served publicly; JS guard does the redirect
                                 "/admin_home.html", "/admin-login.html",
                                 "/addProduct.html", "/updateProduct.html",
-                                "/deleteProduct.html", "/product_management.html",
+                                "/deleteProduct.html", "/product_management.html","/forgot_password.html",
+                                "/auth/forgot-password",
+                                "/auth/verify-otp",
+                                "/auth/reset-password",
                                 "/css/**", "/js/**"
                         ).permitAll()
                         // ── Auth endpoints ──
