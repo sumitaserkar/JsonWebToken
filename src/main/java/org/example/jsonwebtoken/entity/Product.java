@@ -13,8 +13,13 @@ public class Product {
     Long id;
     String name;
     BigDecimal price;
+
+    @Column(columnDefinition = "TEXT")
     String description;
+
+    @Column(length = 2000)
     String photourl;
+
     Integer stock;
 
     public Product() {

@@ -38,6 +38,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+        String path = request.getServletPath();
+
+        if (path.equals("/auth/forgot-password")
+                || path.equals("/auth/verify-otp")
+                || path.equals("/auth/reset-password")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;

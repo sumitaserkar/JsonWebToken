@@ -20,34 +20,40 @@ public class PasswordResetController {
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(
             @RequestBody ForgotPasswordRequest request) {
-
-        passwordResetService.sendOtp(request.gmail());
-
-        return ResponseEntity.ok("OTP sent successfully");
+        try {
+            passwordResetService.sendOtp(request.gmail());
+            return ResponseEntity.ok("OTP sent successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/verify-otp")
     public ResponseEntity<String> verifyOtp(@RequestBody VerifyOtpRequest request) {
-
-        passwordResetService.verifyOpt(
-                request.gmail(),
-                request.otp()
-        );
-
-        return ResponseEntity.ok("OTP verified successfully");
-
+        try {
+            passwordResetService.verifyOpt(
+                    request.gmail(),
+                    request.otp()
+            );
+            return ResponseEntity.ok("OTP verified successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword( @RequestBody ResetPasswordRequest request) {
-
-        passwordResetService.resetPassword(
-                request.gmail(),
-                request.newPassword(),
-                request.confirmPassword()
-        );
-
-        return ResponseEntity.ok("Password reset successfully");
+    public ResponseEntity<String> resetPassword(
+            @RequestBody ResetPasswordRequest request) {
+        try {
+            passwordResetService.resetPassword(
+                    request.gmail(),
+                    request.newPassword(),
+                    request.confirmPassword()
+            );
+            return ResponseEntity.ok("Password reset successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

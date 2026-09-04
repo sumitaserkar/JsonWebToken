@@ -370,7 +370,12 @@
                 stock: parseInt(stock)
             };
 
-            console.log("Product being sent:", product);
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                showMessage("You are not logged in. Please log in as Admin.");
+                return;
+            }
 
             try {
 
@@ -378,7 +383,8 @@
                     method: "POST",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
                     },
 
                     body: JSON.stringify(product)
@@ -400,6 +406,12 @@
                     document.getElementById("price").value = "";
                     document.getElementById("stock").value = "";
                     document.getElementById("photourl").value = "";
+
+                } else if (response.status === 401 || response.status === 403) {
+
+                    showMessage(
+                        "Access denied or session expired. Please log in again as Admin."
+                    );
 
                 } else {
 

@@ -8,6 +8,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -90,7 +91,8 @@ public class PasswordResetService {
 
     }
 
-    public void resetPassword (String gmail, String newPassword, String confirmPassword) {
+    @Transactional
+    public void resetPassword(String gmail, String newPassword, String confirmPassword) {
 
         if (!newPassword.equals(confirmPassword)) {
             throw new RuntimeException("Passwords do not match");
